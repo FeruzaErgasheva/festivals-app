@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "490752335178",
+    "project_id": "tadbirlar-4",
+    "storage_bucket": "tadbirlar-4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:490752335178:android:99e08a02af27d86e4a75b3",
+        "android_client_info": {
+          "package_name": "com.example.festivals_exam_4"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBn8Fm7WAFCzt3xi2nUUET9RywYZXd3JNc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
