@@ -29,7 +29,7 @@ class MyFestivals extends StatelessWidget {
           children: [
             PersonalFestivals(),
             NearFestivals(),
-            Center(child: Text('Profile Page')),
+            NearFestivals(),
             Center(child: Text('Settings Page')),
           ],
         ),

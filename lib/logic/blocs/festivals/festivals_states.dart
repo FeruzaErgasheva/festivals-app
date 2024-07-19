@@ -1,6 +1,3 @@
-
-
-
 import 'package:festivals_exam_4/data/models/festival_model.dart';
 
 sealed class FestivalsState {}
@@ -20,7 +17,6 @@ final class LoadedWeeklyFestivalsState extends FestivalsState {
 
   LoadedWeeklyFestivalsState(this.festivals);
 }
-
 
 final class ErrorProductsState extends FestivalsState {
   final String message;

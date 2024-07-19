@@ -78,15 +78,20 @@ class _FestivalInfoScreenState extends State<FestivalInfoScreen> {
                 SizedBox(height: 10.0),
                 Row(
                   children: [
-                    const CircleAvatar(),
+                    const CircleAvatar(
+                      backgroundImage: NetworkImage(
+                          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLA994hpL3PMmq0scCuWOu0LGsjef49dyXVg&s"),
+                    ),
                     const SizedBox(width: 20),
-                    Text(
-                      widget.festival.userID,
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        color: Colors.grey[600],
+                    Expanded(
+                      child: Text(
+                        widget.festival.userID,
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          color: Colors.grey[600],
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),

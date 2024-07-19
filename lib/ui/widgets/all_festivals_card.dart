@@ -126,7 +126,8 @@ class _AllFestivalsCardState extends State<AllFestivalsCard> {
                                     ),
                                     const SizedBox(height: 10),
                                     Text(
-                                      locationName.toString(),
+                                      "${locationName[0]},${locationName[1]}}",
+                                      maxLines: 3,
                                       style: TextStyle(
                                         color: Colors.grey[600],
                                       ),

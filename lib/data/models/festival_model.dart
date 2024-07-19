@@ -1,5 +1,4 @@
 import 'package:geocoding/geocoding.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'festival_model.g.dart';
@@ -27,24 +26,7 @@ class FestivalModel {
       required this.userID,
       required this.attendants});
 
-  // DateTime get time {
-  //   // Combine addedDate and addedTime properly
-  //   try {
-  //     print(addedDate);
-  //     DateTime combined = DateTime(
-  //         addedDate[0],
-  //         addedDate[1],
-  //         addedDate[2], // Year, Month, Day
-  //         addedTime[0],
-  //         addedTime[1],
-  //         0 // Hour, Minute, Second
-  //         );
-  //     return combined;
-  //   } catch (e) {
-  //     // Return current time if parsing fails
-  //     return DateTime.now();
-  //   }
-  // }
+
 
   Future<List<String>> getPlaceMarkStrings() async {
     try {

@@ -7,6 +7,7 @@ import 'package:festivals_exam_4/ui/screens/add_festival.dart';
 import 'package:festivals_exam_4/ui/screens/notifications_screen.dart';
 import 'package:festivals_exam_4/ui/widgets/all_festivals_card.dart';
 import 'package:festivals_exam_4/ui/widgets/my_drawer.dart';
+import 'package:festivals_exam_4/ui/widgets/search_view_delegate.dart';
 import 'package:festivals_exam_4/ui/widgets/weekly_festivals_card.dart';
 import 'package:festivals_exam_4/utils/app_styles.dart';
 import 'package:festivals_exam_4/utils/datetime_extension.dart';
@@ -143,9 +144,24 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            "Barcha tadbirlar",
-                            style: AppTextStyles.headline20,
+                          Row(
+                            children: [
+                              Text(
+                                "Barcha tadbirlar",
+                                style: AppTextStyles.headline20,
+                              ),
+                              IconButton(
+                                onPressed: () async {
+                                  String? result = await showSearch(
+                                    context: context,
+                                    delegate:
+                                        SearchViewDelegate(state.festivals),
+                                  );
+                                  print(result);
+                                },
+                                icon: const Icon(Icons.search),
+                              ),
+                            ],
                           ),
                           Expanded(
                             child: ListView.builder(
