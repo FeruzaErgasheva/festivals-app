@@ -1,7 +1,6 @@
 import 'package:festivals_exam_4/data/models/festival_model.dart';
 import 'package:festivals_exam_4/logic/blocs/festivals/festivals_bloc.dart';
 import 'package:festivals_exam_4/logic/blocs/festivals/festivals_states.dart';
-import 'package:festivals_exam_4/ui/screens/register_screen.dart';
 import 'package:festivals_exam_4/ui/widgets/register_festival_modal_bootom_sheet.dart';
 import 'package:festivals_exam_4/utils/app_styles.dart';
 import 'package:festivals_exam_4/utils/datetime_extension.dart';

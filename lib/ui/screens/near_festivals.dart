@@ -14,7 +14,7 @@ class NearFestivals extends StatelessWidget {
       // bloc: context.read<FestivalsBloc>()..add(GetPersonalFestivals()),
       bloc: context.read<NearFestivalsBloc>()..add(GetNearFestivalsEvent()),
       builder: (context, state) {
-        if (state is LoadedNearFestivalsState) {
+        if (state is LoadingNearFestivalsState) {
           return const Center(
             child: CircularProgressIndicator(),
           );
