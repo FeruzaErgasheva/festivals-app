@@ -64,7 +64,9 @@ class _FestivalInfoScreenState extends State<FestivalInfoScreen> {
                     ),
                     const SizedBox(width: 20),
                     Text(
-                      widget.festival.addedDate.toDateTime().toString(),
+                      widget.festival.addedDate
+                          .toDateTime()
+                          .formatDateWithWeekday(),
                       style: TextStyle(
                         fontSize: 18.0,
                         color: Colors.grey[600],

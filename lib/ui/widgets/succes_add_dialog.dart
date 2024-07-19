@@ -1,12 +1,10 @@
-import 'package:festivals_exam_4/data/models/festival_model.dart';
 import 'package:festivals_exam_4/ui/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-class SuccessDialog extends StatelessWidget {
-  FestivalModel festival;
-
-  SuccessDialog({super.key, required this.festival});
+class SuccesAddDialog extends StatelessWidget {
+  String name;
+  SuccesAddDialog({super.key, required this.name});
 
   @override
   Widget build(BuildContext context) {
@@ -44,30 +42,9 @@ class SuccessDialog extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.0),
               child: Text(
-                'Siz ${festival.name} tadbiriga muvaffaqiyatli ro\'yxatdan o\'tdingiz.',
+                'Siz ${name} tadbirini muvaffaqiyatli yaratdingiz.',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 16),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  // Action for Eslatma Belgilash
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange, // Background color
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  textStyle: const TextStyle(fontSize: 16),
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text('Eslatma Belgilash'),
-                ),
               ),
             ),
             const SizedBox(height: 10),
@@ -91,5 +68,6 @@ class SuccessDialog extends StatelessWidget {
         ),
       ),
     );
+    ;
   }
 }

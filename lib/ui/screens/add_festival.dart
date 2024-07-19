@@ -1,3 +1,4 @@
+import 'package:festivals_exam_4/ui/widgets/succes_add_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -128,14 +129,22 @@ class _EventAddPageState extends State<EventAddPage> {
                   Center(
                     child: ElevatedButton(
                       onPressed: () {
-                        context.read<FestivalsBloc>().add(AddFestivalEvent(
-                            name: _nameController.text,
-                            addedDate: _dateController.text,
-                            addedTime: _timeController.text,
-                            description: _infoController.text,
-                            location: _selectedLocation,
-                            imageUrl:
-                                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_Mq101BJcTH0_Ca5F-0lbHqjZ9-6bFy6r4Q&s"));
+                        context.read<FestivalsBloc>().add(
+                              AddFestivalEvent(
+                                  name: _nameController.text,
+                                  addedDate: _dateController.text,
+                                  addedTime: _timeController.text,
+                                  description: _infoController.text,
+                                  location: _selectedLocation,
+                                  imageUrl:
+                                      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_Mq101BJcTH0_Ca5F-0lbHqjZ9-6bFy6r4Q&s"),
+                            );
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return SuccesAddDialog(name: _nameController.text);
+                          },
+                        );
                         // Implement form submission functionality
                       },
                       child: const Text('Qo\'shish'),

@@ -31,7 +31,16 @@ class _MyDrawerState extends State<MyDrawer> {
     return Drawer(
       child: Column(
         children: [
-          const DrawerHeader(child: Icon(Icons.abc)),
+          const DrawerHeader(
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundImage: NetworkImage(
+                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLA994hpL3PMmq0scCuWOu0LGsjef49dyXVg&s'), // Replace with the actual image URL
+              ),
+              title: Text('Alisher Zokirov'),
+              subtitle: Text('alisherzokirov@gmail.com'),
+            ),
+          ),
           ListTile(
             title: const Text("Profile"),
             leading: IconButton(
