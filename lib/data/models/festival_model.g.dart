@@ -16,7 +16,7 @@ FestivalModel _$FestivalModelFromJson(Map<String, dynamic> json) =>
         imageUrl: json['imageUrl'] as String,
         name: json['name'] as String,
         userID: json['userId'] as String,
-        attendants: json["attendants"]);
+        attendants: json["attendants"] as int);
 
 Map<String, dynamic> _$FestivalModelToJson(FestivalModel instance) =>
     <String, dynamic>{

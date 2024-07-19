@@ -1,3 +1,4 @@
+import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -15,33 +16,48 @@ class FestivalModel {
   List location;
   int attendants;
 
-  FestivalModel({
-    required this.location,
-    required this.id,
-    required this.addedDate,
-    required this.addedTime,
-    required this.description,
-    required this.imageUrl,
-    required this.name,
-    required this.userID,
-    required this.attendants
-  });
+  FestivalModel(
+      {required this.location,
+      required this.id,
+      required this.addedDate,
+      required this.addedTime,
+      required this.description,
+      required this.imageUrl,
+      required this.name,
+      required this.userID,
+      required this.attendants});
 
-  DateTime get time {
-    List<dynamic> combinedDateTime = [...addedDate, ...addedTime];
-    DateTime? combined = DateTime.tryParse(combinedDateTime.toString());
+  // DateTime get time {
+  //   // Combine addedDate and addedTime properly
+  //   try {
+  //     print(addedDate);
+  //     DateTime combined = DateTime(
+  //         addedDate[0],
+  //         addedDate[1],
+  //         addedDate[2], // Year, Month, Day
+  //         addedTime[0],
+  //         addedTime[1],
+  //         0 // Hour, Minute, Second
+  //         );
+  //     return combined;
+  //   } catch (e) {
+  //     // Return current time if parsing fails
+  //     return DateTime.now();
+  //   }
+  // }
 
-    return combined ?? DateTime.now(); // Return combined DateTime or current time if parsing fails
-  }
-  LatLng get loc {
-    if (location.length >= 2 &&
-        location[0] is double &&
-        location[1] is double) {
-      double latitude = location[0];
-      double longitude = location[1];
-      return LatLng(latitude, longitude);
-    } else {
-      throw Exception('Invalid location format');
+  Future<List<String>> getPlaceMarkStrings() async {
+    try {
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+          double.parse(location[0]), double.parse(location[1]));
+      print(placemarks);
+      List<String> placeMarkStrings = placemarks.map((placemark) {
+        return "${placemark.name}, ${placemark.locality}, ${placemark.country}";
+      }).toList();
+      return placeMarkStrings;
+    } catch (e) {
+      print("Error: ${e.toString()}");
+      return []; // Return an empty list or handle the error as needed
     }
   }
 

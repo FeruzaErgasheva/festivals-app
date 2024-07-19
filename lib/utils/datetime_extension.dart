@@ -2,9 +2,13 @@ import 'package:festivals_exam_4/data/models/festival_model.dart';
 
 extension DateTimeExtension on List<dynamic> {
   DateTime toDateTime() {
-    if (this.length != 5) {
-      throw ArgumentError(
-          'List must contain exactly 5 elements: [year, month, day, hour, minute]');
+    if (this.length ==3) {
+      return DateTime(
+      int.parse(this[0]),
+      int.parse(this[1]),
+      int.parse(this[2])
+      );
+    
     }
 
     return DateTime(

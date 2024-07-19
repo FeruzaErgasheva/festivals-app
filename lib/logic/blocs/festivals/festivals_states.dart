@@ -15,6 +15,13 @@ final class LoadedFestivalsState extends FestivalsState {
   LoadedFestivalsState(this.festivals);
 }
 
+final class LoadedWeeklyFestivalsState extends FestivalsState {
+  final List<FestivalModel> festivals;
+
+  LoadedWeeklyFestivalsState(this.festivals);
+}
+
+
 final class ErrorProductsState extends FestivalsState {
   final String message;
 

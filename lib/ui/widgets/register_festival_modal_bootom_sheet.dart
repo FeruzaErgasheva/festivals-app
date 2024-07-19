@@ -1,28 +1,39 @@
+import 'package:festivals_exam_4/data/models/festival_model.dart';
+import 'package:festivals_exam_4/logic/blocs/festivals/festivals_bloc.dart';
+import 'package:festivals_exam_4/logic/blocs/festivals/festivals_events.dart';
+import 'package:festivals_exam_4/logic/blocs/festivals/festivals_states.dart';
+import 'package:festivals_exam_4/services/festivals/festivals_http_services.dart';
+import 'package:festivals_exam_4/ui/widgets/success_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegistrationBottomSheet extends StatefulWidget {
-  const RegistrationBottomSheet({super.key});
+  FestivalModel festival;
+  RegistrationBottomSheet({super.key, required this.festival});
 
   @override
   // ignore: library_private_types_in_public_api
-  _RegistrationBottomSheetState createState() => _RegistrationBottomSheetState();
+  _RegistrationBottomSheetState createState() =>
+      _RegistrationBottomSheetState();
 }
 
 class _RegistrationBottomSheetState extends State<RegistrationBottomSheet> {
   int _count = 0;
   String _selectedPaymentMethod = 'Click';
 
+  FestivalsHttpServices festivalsHttpServices = FestivalsHttpServices();
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(20.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-             const  Text(
+              const Text(
                 'Ro\'yxatdan O\'tish',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
@@ -32,62 +43,85 @@ class _RegistrationBottomSheetState extends State<RegistrationBottomSheet> {
               ),
             ],
           ),
-          SizedBox(height: 16),
-          Text('Joylar sonini tanlang'),
-          SizedBox(height: 8),
+          const SizedBox(height: 16),
+          const Text('Joylar sonini tanlang'),
+          const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
-                icon: Icon(Icons.remove),
+                icon: const Icon(Icons.remove),
                 onPressed: _count > 0 ? () => setState(() => _count--) : null,
               ),
               Text('$_count', style: TextStyle(fontSize: 20)),
               IconButton(
-                icon: Icon(Icons.add),
+                icon: const Icon(Icons.add),
                 onPressed: () => setState(() => _count++),
               ),
             ],
           ),
-          SizedBox(height: 16),
-          Text('To\'lov turini tanlang'),
-          SizedBox(height: 8),
+          const SizedBox(height: 16),
+          const Text('To\'lov turini tanlang'),
+          const SizedBox(height: 8),
           Column(
             children: [
               RadioListTile(
-                title: Text('Click'),
+                title: const Text('Click'),
                 value: 'Click',
                 groupValue: _selectedPaymentMethod,
-                onChanged: (value) => setState(() => _selectedPaymentMethod = value!),
+                onChanged: (value) =>
+                    setState(() => _selectedPaymentMethod = value!),
               ),
               RadioListTile(
                 title: Text('Payme'),
                 value: 'Payme',
                 groupValue: _selectedPaymentMethod,
-                onChanged: (value) => setState(() => _selectedPaymentMethod = value!),
+                onChanged: (value) =>
+                    setState(() => _selectedPaymentMethod = value!),
               ),
               RadioListTile(
                 title: Text('Naqd'),
                 value: 'Naqd',
                 groupValue: _selectedPaymentMethod,
-                onChanged: (value) => setState(() => _selectedPaymentMethod = value!),
+                onChanged: (value) =>
+                    setState(() => _selectedPaymentMethod = value!),
               ),
             ],
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () {
               // Handle button press
+              // context.read<FestivalsBloc>().add(IncrementFestivalAttendantsEvent(id: widget.festival.id, attendants: widget.festival.attendants, orders: _count));
+              context.read<FestivalsBloc>().add(
+                  IncrementFestivalAttendantsEvent(
+                      id: widget.festival.id,
+                      attendants: widget.festival.attendants + _count));
+              if (_count > 0) {
+                _count = 0;
+
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return SuccessDialog(festival: widget.festival);
+                  },
+                );
+              } else {
+                _count = 0;
+                Navigator.of(context).pop();
+              }
+              setState(() {});
+              // setState(() {});
             },
-            child: Text('Keyingi'),
             style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30),
               ),
             ),
+            child: const Text('Keyingi'),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
         ],
       ),
     );

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:festivals_exam_4/data/models/festival_model.dart';
 import 'package:festivals_exam_4/utils/datetime_extension.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,7 +14,7 @@ class FestivalsHttpServices {
     try {
       final response = await http.get(url);
       Map data = jsonDecode(response.body);
-      // print(data);
+      print(data);
 
       if (data != null) {
         data.forEach((key, value) {
@@ -23,7 +24,7 @@ class FestivalsHttpServices {
           loadedFestivals.add(FestivalModel.fromJson(value));
         });
       }
-      print("festivals all: $loadedFestivals");
+      // print("festivals all: $loadedFestivals");
 
       return loadedFestivals;
     } catch (e) {
@@ -46,7 +47,7 @@ class FestivalsHttpServices {
         data.forEach((key, value) {
           value['id'] = key;
           // print(key);
-          // print(value);
+          // print(value);p
           loadedFestivals.add(FestivalModel.fromJson(value));
         });
         for (FestivalModel festival in loadedFestivals) {
@@ -57,8 +58,7 @@ class FestivalsHttpServices {
           }
         }
       }
-
-      print("comingFestivals:$comingFestivals");
+      // print("comingFestivals:$comingFestivals");
       return comingFestivals;
     } catch (e) {
       print(e);
@@ -66,14 +66,18 @@ class FestivalsHttpServices {
     }
   }
 
- Future<void> incrementAttendants(String id,  int attendants, int orders) async {
-    final userToken = await _getUserToken();
-    Uri url = Uri.parse("https://tadbirlar-4-default-rtdb.firebaseio.com/festivals/$id.json");
-    final updatedAttendants=attendants+orders;
+
+
+
+  Future<void> incrementAttendants(String id, int attendants) async {
+    // final userToken = await _getUserToken();
+    Uri url = Uri.parse(
+        "https://tadbirlar-4-default-rtdb.firebaseio.com/festivals/$id.json");
+
     try {
       final response = await http.patch(url,
           body: jsonEncode({
-            "attendants": updatedAttendants,
+            "attendants": attendants,
           }));
 
       if (response.statusCode != 200) {
@@ -87,26 +91,34 @@ class FestivalsHttpServices {
 
   Future<FestivalModel> addFestival(
     String name,
-    List<int> addedDate,
-    List<int> addedTime,
+    String addedDate,
+    String addedTime,
     String description,
     String imageUrl,
-    List<int> location,
+    LatLng location,
   ) async {
-    final userToken = await _getUserToken();
+    // final userToken = await _getUserToken();
     final userId = await _getUserId();
     Uri url = Uri.parse(
-        "https://tadbirlar-4-default-rtdb.firebaseio.com/festivals.json?auth=$userToken");
+        "https://tadbirlar-4-default-rtdb.firebaseio.com/festivals.json");
 
     try {
+      String dateString = addedDate;
+      List<String> dateList = dateString.split('-');
+      print(dateList);
+      String timeString = addedTime;
+      List<String> timeParts = timeString.split(' ');
+      List<String> timeList = timeParts[0].split(':');
+      print(dateList);
       Map<String, dynamic> festivalData = {
         "name": name,
-        "addedDate": addedDate,
-        "addedTime": addedTime,
+        "addedDate": dateList,
+        "addedTime":  timeList,
         "description": description,
         "imageUrl": imageUrl,
-        "location": location,
-        "userId": userId
+        "location": ["${location.latitude}", "${location.longitude}"],
+        "userId": userId,
+        "attendants":0
       };
       final response = await http.post(
         url,
@@ -217,5 +229,5 @@ void main(List<String> args) {
   //   "https://ideafoster.com/wp-content/uploads/2023/03/hackaton-concepto-funciona-922.jpeg",
   //   [24, 35],
   // );
-  festivalsHttpServices.getFestivalsWithinWeek();
+  festivalsHttpServices.incrementAttendants("festival1", 5);
 }

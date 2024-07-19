@@ -1,6 +1,7 @@
 import 'package:festivals_exam_4/data/models/festival_model.dart';
 import 'package:festivals_exam_4/ui/screens/festival_info_screen.dart';
 import 'package:festivals_exam_4/utils/app_styles.dart';
+import 'package:festivals_exam_4/utils/datetime_extension.dart';
 import 'package:flutter/material.dart';
 
 class WeeklyFestivalsCard extends StatelessWidget {
@@ -37,11 +38,11 @@ class WeeklyFestivalsCard extends StatelessWidget {
             ),
           ),
           child: Column(
-            mainAxisAlignment:
-                MainAxisAlignment.center, // Center content inside the card
+            // Center content inside the card
             children: [
               Text(
-                festival.time.day.toString(),
+                festival.addedDate.toDateTime().formatDateWithWeekday(),
+                style: TextStyle(fontWeight: FontWeight.w900, fontSize: 24),
               ),
               Text(
                 festival.name,

@@ -1,5 +1,6 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:festivals_exam_4/ui/screens/login_screen.dart';
+import 'package:festivals_exam_4/ui/widgets/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -43,7 +44,7 @@ class MainApp extends StatelessWidget {
           },
           builder: (context, state) {
             if (state is AuthenticatedAuthState) {
-              return const HomeScreen();
+              return HomeScreen();
             }
 
             return const LoginScreen();

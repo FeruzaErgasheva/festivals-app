@@ -1,9 +1,8 @@
 import 'package:bloc/bloc.dart';
-import 'package:festivals_exam_4/data/repositories/festivals_repositories.dart';
+import 'package:festivals_exam_4/data/models/festival_model.dart';
+import 'package:festivals_exam_4/data/repositories/festivals/festivals_repositories.dart';
 import 'package:festivals_exam_4/logic/blocs/festivals/festivals_events.dart';
 import 'package:festivals_exam_4/logic/blocs/festivals/festivals_states.dart';
-import 'package:stream_transform/stream_transform.dart';
-
 
 class FestivalsBloc extends Bloc<FestivalsEvents, FestivalsState> {
   final FestivalsRepositories _festivalsRepositories;
@@ -13,25 +12,40 @@ class FestivalsBloc extends Bloc<FestivalsEvents, FestivalsState> {
         super(InitialFestivalsState()) {
     on<GetFestivalsEvent>(_getFestivals);
     on<GetFestivalWithinWeek>(_getFestivalsWithinWeek);
-    on<IncrementFestivalAttendantsEvent> (_incrementFestivalAttendants);
-    // on<AddFestivalEvent>(
-    //   _addFestival,
-    //   // funkisyani ichga tushiradi va keyingi 5 soniya kutadi
-    //   //  transformer: (events, mapper) =>
-    //   //     events.throttle(const Duration(seconds: 5)).switchMap(mapper),
-
-    //   // 5 soniyani kutadi va keyin funksiyani chaqiradi
-    //   // transformer: (events, mapper) => events
-    //   //     .debounce(const Duration(seconds: 5), leading: false, trailing: true)
-    //   //     .switchMap(mapper),
-    // );
-    // on<EditFestivalEvent>(_editProduct);
-    // on<DeleteFestivalEvent>(_deleteProduct);
+    on<IncrementFestivalAttendantsEvent>(_incrementFestivalAttendants);
+    on<AddFestivalEvent>(_addFestival);
+    // on<GetPersonalFestivals>(_getPersonalFestivals);
   }
 
+  void _incrementFestivalAttendants(IncrementFestivalAttendantsEvent event,
+      Emitter<FestivalsState> emit) async {
+    if (state is LoadedFestivalsState) {
+      List<FestivalModel> existingFestivals =
+          (state as LoadedFestivalsState).festivals;
+      emit(LoadingFestivalsState());
 
-  void _incrementFestivalAttendants(event, emit){
-    emit(LoadingFestivalsState());
+      try {
+        emit(LoadedFestivalsState(existingFestivals));
+
+        await _festivalsRepositories.incrementAttendants(
+          event.id,
+          event.attendants,
+        );
+        // Update the festival list with the incremented attendants
+        for (var festival in existingFestivals) {
+          if (festival.id == event.id) {
+            festival.attendants = event.attendants;
+          }
+        }
+        // emit(LoadedFestivalsState(existingFestivals));
+      } catch (e) {
+        emit(ErrorProductsState(e.toString()));
+      }
+    } else {
+      // Handle the case where the state is not LoadedFestivalsState
+      emit(ErrorProductsState(
+          "Cannot increment attendants. Festivals are not loaded."));
+    }
   }
 
   void _getFestivals(
@@ -41,9 +55,6 @@ class FestivalsBloc extends Bloc<FestivalsEvents, FestivalsState> {
     emit(LoadingFestivalsState());
 
     try {
-      // await emit.forEach(stream, onData: (data) {
-      //   return LoadedProductsState(data);
-      // });
       final festivals = await _festivalsRepositories.getFestivals();
       emit(LoadedFestivalsState(festivals));
     } catch (e) {
@@ -58,76 +69,53 @@ class FestivalsBloc extends Bloc<FestivalsEvents, FestivalsState> {
     emit(LoadingFestivalsState());
 
     try {
-      // await emit.forEach(stream, onData: (data) {
-      //   return LoadedProductsState(data);
-      // });
-      final comingFestivals = await _festivalsRepositories.getFestivalsWithinWeek();
+      final comingFestivals =
+          await _festivalsRepositories.getFestivalsWithinWeek();
       emit(LoadedFestivalsState(comingFestivals));
     } catch (e) {
       emit(ErrorProductsState(e.toString()));
     }
   }
 
-  // void _addProduct(
-  //   AddProductEvent event,
-  //   Emitter<ProductsState> emit,
+  // void _getPersonalFestivals(
+  //   GetPersonalFestivals event,
+  //   Emitter<FestivalsState> emit,
   // ) async {
-  //   List<Product> existingProducts = [];
-  //   if (state is LoadedProductsState) {
-  //     existingProducts = (state as LoadedProductsState).products;
-  //   }
-  //   emit(LoadingProductsState());
+  //   emit(LoadingFestivalsState());
 
   //   try {
-  //     final product = await _productRepository.addProduct(event.title);
-  //     existingProducts.add(product);
-  //     emit(LoadedProductsState(existingProducts));
+  //     final personalFestivals =
+  //         await _festivalsRepositories.getPersonalFestivals();
+  //     emit(LoadedFestivalsState(personalFestivals));
   //   } catch (e) {
   //     emit(ErrorProductsState(e.toString()));
   //   }
   // }
 
-  // void _editProduct(
-  //   EditProductEvent event,
-  //   Emitter<ProductsState> emit,
-  // ) async {
-  //   List<Product> existingProducts = [];
-  //   if (state is LoadedProductsState) {
-  //     existingProducts = (state as LoadedProductsState).products;
-  //   }
-  //   emit(LoadingProductsState());
+  void _addFestival(
+    AddFestivalEvent event,
+    Emitter<FestivalsState> emit,
+  ) async {
+    List<FestivalModel> existingFestivals = [];
+    if (state is LoadedFestivalsState) {
+      existingFestivals = (state as LoadedFestivalsState).festivals;
+    }
+    emit(LoadingFestivalsState());
 
-  //   try {
-  //     await _productRepository.editProduct(event.id, event.newTitle);
-  //     for (var product in existingProducts) {
-  //       if (product.id == event.id) {
-  //         product.title = event.newTitle;
-  //       }
-  //     }
-  //     emit(LoadedProductsState(existingProducts));
-  //   } catch (e) {
-  //     emit(ErrorProductsState(e.toString()));
-  //   }
-  // }
+    try {
+      final festival = await _festivalsRepositories.addFestival(
+          event.name,
+          event.addedDate,
+          event.addedTime,
+          event.description,
+          event.imageUrl,
+          event.location);
+      existingFestivals.add(festival);
+      emit(LoadedFestivalsState(existingFestivals));
+    } catch (e) {
+      emit(ErrorProductsState(e.toString()));
+    }
+  }
 
-  // void _deleteProduct(
-  //   DeleteProductEvent event,
-  //   Emitter<ProductsState> emit,
-  // ) async {
-  //   List<Product> existingProducts = [];
-  //   if (state is LoadedProductsState) {
-  //     existingProducts = (state as LoadedProductsState).products;
-  //   }
-  //   emit(LoadingProductsState());
-
-  //   try {
-  //     await _productRepository.deleteProduct(event.id);
-  //     existingProducts.removeWhere((product) {
-  //       return product.id == event.id;
-  //     });
-  //     emit(LoadedProductsState(existingProducts));
-  //   } catch (e) {
-  //     emit(ErrorProductsState(e.toString()));
-  //   }
-  // }
+ 
 }
