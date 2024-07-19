@@ -2,16 +2,19 @@ import 'package:festivals_exam_4/data/repositories/auth_repository.dart';
 import 'package:festivals_exam_4/data/repositories/festivals/festivals_repositories.dart';
 import 'package:festivals_exam_4/data/repositories/festivals/near_festivals_repository.dart';
 import 'package:festivals_exam_4/data/repositories/festivals/personal_festivals_repositories.dart';
+import 'package:festivals_exam_4/data/repositories/user_repository.dart';
 import 'package:festivals_exam_4/firebase_options.dart';
 import 'package:festivals_exam_4/logic/blocs/auth/auth_bloc.dart';
 import 'package:festivals_exam_4/logic/blocs/festivals/festivals_bloc.dart';
 import 'package:festivals_exam_4/logic/blocs/near_fetsivals/near_festivals_bloc.dart';
 import 'package:festivals_exam_4/logic/blocs/personal_festivals/personal_festivals_bloc.dart';
 import 'package:festivals_exam_4/logic/blocs/theme/theme_bloc.dart';
+import 'package:festivals_exam_4/logic/blocs/user/user_bloc.dart';
 import 'package:festivals_exam_4/services/auth_service.dart';
 import 'package:festivals_exam_4/services/festivals/festivals_http_services.dart';
 import 'package:festivals_exam_4/services/festivals/near_festivals_http.dart';
 import 'package:festivals_exam_4/services/festivals/personal_festivals_http_services.dart';
+import 'package:festivals_exam_4/services/user_services/user_services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,6 +31,7 @@ void main() async {
       PersonalFestivalsHttpServices();
 
       final NearFestivalsHttpServices nearFestivalsHttpServices=NearFestivalsHttpServices();
+      final UserHttpServices userHttpServices=UserHttpServices();
 
   runApp(
     MultiRepositoryProvider(
@@ -36,6 +40,13 @@ void main() async {
           create: (context) {
             return AuthRepository(
               firebaseAuthService: firebaseAuthService,
+            );
+          },
+        ),
+        RepositoryProvider(
+          create: (context) {
+            return UserRepository(
+              userHttpServices: userHttpServices
             );
           },
         ),
@@ -64,6 +75,13 @@ void main() async {
             create: (ctx) {
               return AuthBloc(
                 authRepository: ctx.read<AuthRepository>(),
+              );
+            },
+          ),
+           BlocProvider(
+            create: (ctx) {
+              return UserBloc(
+                userRepository: ctx.read<UserRepository>(),
               );
             },
           ),

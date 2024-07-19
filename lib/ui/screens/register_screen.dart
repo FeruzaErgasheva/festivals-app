@@ -1,4 +1,6 @@
 import 'package:festivals_exam_4/logic/blocs/auth/auth_bloc.dart';
+import 'package:festivals_exam_4/logic/blocs/user/user_bloc.dart';
+import 'package:festivals_exam_4/logic/blocs/user/user_events.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,6 +16,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final passwordConfirmationController = TextEditingController();
+  final userNameController = TextEditingController();
 
   void submit() {
     if (formKey.currentState!.validate()) {
@@ -25,6 +28,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
           );
     }
+    // context.read<UserBloc>()
+    //   ..add(AddUserEvent(
+    //       email: emailController.text, userName: userNameController.text));
   }
 
   @override
@@ -70,6 +76,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
                       return "Email kiriting";
+                    }
+
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: userNameController,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: "userName",
+                  ),
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return "UserName kiriting";
                     }
 
                     return null;

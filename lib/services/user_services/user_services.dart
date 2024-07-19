@@ -14,15 +14,47 @@ class UserHttpServices{
       Map<String, dynamic> data = jsonDecode(response.body);
       print(data);
 
-      if (data != null) {
+     
         return UserModel.fromJson(data);
-      }
+      
       // print("festivals all: $loadedFestivals");
 
     } catch (e) {
 
     }
   }
+
+  Future<void> addUser(
+    String email,
+    String userName
+  ) async {
+    // final userToken = await _getUserToken();
+    final userId = await _getUserId();
+    Uri url = Uri.parse(
+        "https://tadbirlar-4-default-rtdb.firebaseio.com/users.json");
+
+    try {
+     
+      Map<String, dynamic> userData = {
+        "userId": userId,
+        "email":email,
+        "userName":userName
+      };
+      final response = await http.post(
+        url,
+        body: jsonEncode(userData),
+      );
+
+      if (response.statusCode != 200) {
+        final errorData = jsonDecode(response.body);
+        throw (errorData['error']);
+      }
+
+    } catch (e) {
+      rethrow;
+    }
+  }
+
 
 
    Future<String> _getUserId() async {
